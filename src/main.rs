@@ -1,13 +1,16 @@
 mod hashing;
 mod file_compare;
 mod scanner;
+mod report;
 
 use file_compare::compare_files;
 use scanner::scan_directory_for_duplicates;
+use report::write_json_report;
+
 use std::{env, process};
 
 fn print_usage() {
-    println!("Usage:");
+    println!("📘 Usage:");
     println!("  dedup compare <file1> <file2>       Compare two files");
     println!("  dedup scan <directory_path>        Scan directory for duplicate files");
 }
@@ -16,7 +19,7 @@ fn run_compare(file1: &str, file2: &str) {
     match compare_files(file1, file2) {
         Ok(true) => println!("✅ Files are identical."),
         Ok(false) => println!("❌ Files are different."),
-        Err(e) => eprintln!("Error comparing files: {e}"),
+        Err(e) => eprintln!("❌ Error comparing files: {e}"),
     }
 }
 
@@ -35,6 +38,13 @@ fn run_scan(dir: &str) {
                     println!("  - {}", file);
                 }
             }
+        }
+
+        // ✅ Generate JSON report
+        if let Err(e) = write_json_report(&duplicates, "report.json") {
+            eprintln!("❌ Failed to write report: {e}");
+        } else {
+            println!("📄 Report saved to 'report.json'");
         }
     }
 }
@@ -56,7 +66,9 @@ fn main() {
                 process::exit(1);
             }
 
-            run_compare(&args[2], &args[3]);
+            let file1 = &args[2];
+            let file2 = &args[3];
+            run_compare(file1, file2);
         }
 
         "scan" => {
@@ -66,7 +78,8 @@ fn main() {
                 process::exit(1);
             }
 
-            run_scan(&args[2]);
+            let dir = &args[2];
+            run_scan(dir);
         }
 
         _ => {
