@@ -1,0 +1,1 @@
+Rust is fast and memory-efficient.
