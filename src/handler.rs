@@ -2,25 +2,16 @@ use crate::{
     file_compare::compare_files,
     scanner::scan_directory_for_duplicates,
     report::write_json_report,
+    filter::parse_filter_options,
     safe_delete::delete_duplicates,
 };
 
 use std::process;
 
-/// Prints the CLI usage instructions.
-pub fn print_usage() {
-    println!("📘 Usage:");
-    println!("  dedup compare <file1> <file2>       Compare two files");
-    println!("  dedup scan <directory_path>        Scan directory for duplicate files");
-    println!("  dedup report <directory_path> <output.json>  Generate JSON report");
-    println!("  dedup delete <directory_path>      Safely delete duplicate files");
-}
-
-/// Handle the `compare` command.
-pub fn handle_compare(args: &[String]) {
+/// Handles the `compare` command
+pub fn handle_compare_command(args: &[String]) {
     if args.len() != 4 {
         eprintln!("❌ Error: compare requires 2 file paths.");
-        print_usage();
         process::exit(1);
     }
 
@@ -34,67 +25,123 @@ pub fn handle_compare(args: &[String]) {
     }
 }
 
-/// Handle the `scan` command.
-pub fn handle_scan(args: &[String]) {
-    if args.len() != 3 {
+/// Handles the `scan` command
+pub fn handle_scan_command(args: &[String]) {
+    if args.len() < 3 {
         eprintln!("❌ Error: scan requires a directory path.");
-        print_usage();
         process::exit(1);
     }
 
     let dir = &args[2];
-    let duplicates = scan_directory_for_duplicates(dir);
+    let filter_args = &args[3..];
+
+    let filters = parse_filter_options(filter_args);
+    let duplicates = scan_directory_for_duplicates(dir, &filters);
 
     if duplicates.is_empty() {
         println!("✅ No duplicates found in `{}`", dir);
-    } else {
-        println!("🔍 Duplicate files found:");
-        for (hash, files) in &duplicates {
-            if files.len() > 1 {
-                println!("\n🧬 Hash: {}", hash);
-                for file in files {
-                    println!("  - {}", file);
-                }
+        return;
+    }
+
+    let mut found = false;
+    println!("🔍 Duplicate files found:");
+    for (hash, files) in &duplicates {
+        if files.len() > 1 {
+            found = true;
+            println!("\n🧬 Hash: {}", hash);
+            for file in files {
+                println!("  - {}", file);
             }
         }
     }
+
+    if !found {
+        println!("✅ No duplicate files matched the given filters.");
+    }
 }
 
-/// Handle the `report` command.
-pub fn handle_report(args: &[String]) {
-    if args.len() != 4 {
-        eprintln!("❌ Error: report requires directory path and output file.");
-        print_usage();
+/// Handles the `report` command
+pub fn handle_report_command(args: &[String]) {
+    if args.len() < 4 {
+        eprintln!("❌ Error: report requires a directory and an output file.");
         process::exit(1);
     }
 
     let dir = &args[2];
-    let output_file = &args[3];
+    let output_path = &args[3];
+    let filter_args = &args[4..];
+    let filters = parse_filter_options(filter_args);
 
-    let duplicates = scan_directory_for_duplicates(dir);
-    match write_json_report(&duplicates, output_file) {
-        Ok(_) => println!("📄 JSON report written to {}", output_file),
-        Err(e) => eprintln!("❌ Failed to write report: {e}"),
+    let duplicates = scan_directory_for_duplicates(dir, &filters);
+
+    if let Err(e) = write_json_report(&duplicates, output_path) {
+        eprintln!("❌ Failed to write report: {e}");
+    } else {
+        println!("📄 JSON report saved to {}", output_path);
     }
 }
 
-/// Handle the `delete` command.
-pub fn handle_delete(args: &[String]) {
-    if args.len() != 3 {
-        eprintln!("❌ Error: delete requires a directory path.");
-        print_usage();
+/// Handles the `delete` command
+pub fn handle_delete_command(args: &[String]) {
+    if args.len() < 3 {
+        eprintln!("❌ Error: delete requires a directory.");
         process::exit(1);
     }
 
-    let dir: &String = &args[2];
-    let duplicates = scan_directory_for_duplicates(dir);
+    let dir = &args[2];
+    let mut dry_run = false;
+
+    let mut i = 3;
+    while i < args.len() {
+        if args[i] == "--dry-run" {
+            dry_run = true;
+        }
+        i += 1;
+    }
+
+    let filters = parse_filter_options(&args[3..]);
+
+    let duplicates = scan_directory_for_duplicates(dir, &filters);
 
     if duplicates.is_empty() {
         println!("✅ No duplicates to delete.");
     } else {
-        match delete_duplicates(&duplicates, false) {
-            Ok(()) => println!("\n🗑️ Deleted duplicate files successfully."),
-            Err(e) => eprintln!("\n❌ Failed to delete duplicates: {e}"),
+        if let Err(e) = delete_duplicates(&duplicates, dry_run) {
+            eprintln!("❌ Failed to delete duplicates: {e}");
         }
+    }
+}
+
+/// Handles the `filter` command
+pub fn handle_filter_command(args: &[String]) {
+    if args.len() < 3 {
+        eprintln!("❌ Error: filter requires a directory path.");
+        process::exit(1);
+    }
+
+    let dir = &args[2];
+    let filters = parse_filter_options(&args[3..]);
+    let filtered = scan_directory_for_duplicates(dir, &filters);
+
+    if filtered.is_empty() {
+        println!("✅ No matching files found.");
+        return;
+    }
+
+    let mut found = false;
+    println!("🔍 Matching files:");
+
+    for (hash, files) in &filtered {
+        if files.len() > 1 {
+            found = true;
+            println!("\n🧬 Hash: {}", hash);
+            for file in files {
+                println!("  - {}", file);
+            }
+        }
+    }
+
+    if !found {
+        println!("✅ No duplicate files matched the given filters.");
     }
 }
