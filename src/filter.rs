@@ -1,13 +1,9 @@
 use regex::Regex;
-use std::{
-    ffi::OsStr,
-    fs,
-    path::Path,
-};
+use std::{ffi::OsStr, fs, path::Path};
 
 /// Structure to hold filtering options
 pub struct FilterOptions {
-    pub min_size: Option<u64>,      // in bytes
+    pub min_size: Option<u64>, // in bytes
     pub max_size: Option<u64>,
     pub extensions: Option<Vec<String>>,
     pub regex: Option<Regex>,
@@ -96,9 +92,9 @@ pub fn parse_filter_options(args: &[String]) -> FilterOptions {
             }
             "--ext" => {
                 i += 1;
-                options.extensions = args.get(i).map(|v| {
-                    v.split(',').map(|s| s.trim().to_string()).collect()
-                });
+                options.extensions = args
+                    .get(i)
+                    .map(|v| v.split(',').map(|s| s.trim().to_string()).collect());
             }
             "--regex" => {
                 i += 1;

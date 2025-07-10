@@ -2,7 +2,7 @@
 name = "intelligent-file-deduplicator"
 version = "0.1.0"
 edition = "2024"
-documentation = "https://github.com/DEBANSU244688/intelligent-file-deduplicator/hashlaser"
+documentation = "https://debansudas.github.io/intelligent-file-deduplicator/hashlaser"
 
 [dependencies]
 sha2 = "0.10"

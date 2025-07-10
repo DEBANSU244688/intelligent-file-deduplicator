@@ -1,11 +1,7 @@
-use intelligent_file_deduplicator::scanner::scan_directory_for_duplicates;
 use intelligent_file_deduplicator::filter::FilterOptions;
+use intelligent_file_deduplicator::scanner::scan_directory_for_duplicates;
 
-use std::{
-    fs::File,
-    io::Write,
-    path::PathBuf
-};
+use std::{fs::File, io::Write, path::PathBuf};
 use tempfile::tempdir;
 
 #[test]
@@ -24,13 +20,24 @@ fn test_duplicate_detection() {
     writeln!(file2, "HashLaser").unwrap();
     writeln!(file3, "Different content").unwrap();
 
-    let duplicates = scan_directory_for_duplicates(dir.path().to_str().unwrap(), &FilterOptions::default());
+    let duplicates =
+        scan_directory_for_duplicates(dir.path().to_str().unwrap(), &FilterOptions::default());
 
     let mut found = false;
     for (_hash, files) in &duplicates {
         if files.len() > 1 {
             found = true;
-            let file_names: Vec<_> = files.iter().map(|f| PathBuf::from(f).file_name().unwrap().to_str().unwrap().to_string()).collect();
+            let file_names: Vec<_> = files
+                .iter()
+                .map(|f| {
+                    PathBuf::from(f)
+                        .file_name()
+                        .unwrap()
+                        .to_str()
+                        .unwrap()
+                        .to_string()
+                })
+                .collect();
             assert!(file_names.contains(&"file1.txt".to_string()));
             assert!(file_names.contains(&"file2.txt".to_string()));
         }

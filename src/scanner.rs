@@ -6,8 +6,8 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-use crate::hashing::hash_file;
 use crate::filter::FilterOptions;
+use crate::hashing::hash_file;
 
 /// Scans a directory recursively and finds duplicate files based on SHA-256 hash.
 ///
@@ -26,7 +26,10 @@ use crate::filter::FilterOptions;
 /// ```text
 /// // let duplicates = scan_directory_for_duplicates("/some/path", &filter_options);
 /// ```
-pub fn scan_directory_for_duplicates(dir: &str, filters: &FilterOptions) -> HashMap<String, Vec<String>> {
+pub fn scan_directory_for_duplicates(
+    dir: &str,
+    filters: &FilterOptions,
+) -> HashMap<String, Vec<String>> {
     // Collect all files recursively from the directory
     let files = collect_files_recursively(Path::new(dir));
 
@@ -43,7 +46,9 @@ pub fn scan_directory_for_duplicates(dir: &str, filters: &FilterOptions) -> Hash
     filtered_files.par_iter().for_each(|file_path| {
         if let Ok(hash) = hash_file(file_path.to_str().unwrap()) {
             let mut map = hash_map.lock().unwrap();
-            map.entry(hash).or_default().push(file_path.to_string_lossy().to_string());
+            map.entry(hash)
+                .or_default()
+                .push(file_path.to_string_lossy().to_string());
         }
     });
 

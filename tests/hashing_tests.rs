@@ -1,6 +1,6 @@
 use intelligent_file_deduplicator::hashing::hash_file;
-use tempfile::NamedTempFile;
 use std::io::Write;
+use tempfile::NamedTempFile;
 
 #[test]
 fn test_hash_consistency() {

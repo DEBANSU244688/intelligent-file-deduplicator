@@ -1,10 +1,10 @@
-mod hashing;
 mod file_compare;
-mod scanner;
-mod report;
 mod filter;
-mod safe_delete;
 mod handler;
+mod hashing;
+mod report;
+mod safe_delete;
+mod scanner;
 mod ui;
 
 use handler::*;

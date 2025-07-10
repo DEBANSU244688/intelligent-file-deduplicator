@@ -1,10 +1,11 @@
-use intelligent_file_deduplicator::filter::{FilterOptions};
+use intelligent_file_deduplicator::filter::FilterOptions;
+use regex::Regex;
 use std::{
     fs::{self, File},
-    io::Write, path::Path
+    io::Write,
+    path::Path,
 };
 use tempfile::tempdir;
-use regex::Regex;
 
 #[test]
 fn test_filter_options_match() {

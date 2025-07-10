@@ -15,7 +15,10 @@ pub fn print_banner() {
         .cyan()
     );
 
-    println!("{}", "🔒 Intelligent File Deduplicator CLI | v1.0.0\n".dimmed());
+    println!(
+        "{}",
+        "🔒 Intelligent File Deduplicator CLI | v1.0.0\n".dimmed()
+    );
 }
 
 /// Prints a success message in green.

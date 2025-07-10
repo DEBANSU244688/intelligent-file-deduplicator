@@ -1,9 +1,5 @@
 use intelligent_file_deduplicator::safe_delete::delete_duplicates;
-use std::{
-    collections::HashMap,
-    fs::File,
-    io::Write
-};
+use std::{collections::HashMap, fs::File, io::Write};
 use tempfile::tempdir;
 
 #[test]
@@ -13,8 +9,14 @@ fn test_dry_run_deletion() {
     let file1 = dir.path().join("dup1.txt");
     let file2 = dir.path().join("dup2.txt");
 
-    File::create(&file1).unwrap().write_all(b"same content").unwrap();
-    File::create(&file2).unwrap().write_all(b"same content").unwrap();
+    File::create(&file1)
+        .unwrap()
+        .write_all(b"same content")
+        .unwrap();
+    File::create(&file2)
+        .unwrap()
+        .write_all(b"same content")
+        .unwrap();
 
     let mut duplicates = HashMap::new();
     duplicates.insert(
@@ -39,8 +41,14 @@ fn test_actual_deletion() {
     let file1 = dir.path().join("file1.txt");
     let file2 = dir.path().join("file2.txt");
 
-    File::create(&file1).unwrap().write_all(b"duplicate").unwrap();
-    File::create(&file2).unwrap().write_all(b"duplicate").unwrap();
+    File::create(&file1)
+        .unwrap()
+        .write_all(b"duplicate")
+        .unwrap();
+    File::create(&file2)
+        .unwrap()
+        .write_all(b"duplicate")
+        .unwrap();
 
     let mut duplicates = HashMap::new();
     duplicates.insert(

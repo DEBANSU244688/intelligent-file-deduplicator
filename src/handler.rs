@@ -8,12 +8,8 @@
 //! - `delete_duplicates`: For safely deleting identified duplicate files.
 
 use crate::{
-    file_compare::compare_files,
-    scanner::scan_directory_for_duplicates,
-    report::write_json_report,
-    filter::parse_filter_options,
-    safe_delete::delete_duplicates,
-    ui::*,
+    file_compare::compare_files, filter::parse_filter_options, report::write_json_report,
+    safe_delete::delete_duplicates, scanner::scan_directory_for_duplicates, ui::*,
 };
 
 use std::process;

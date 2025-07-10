@@ -1,10 +1,5 @@
-use std::{
-    fs::File,
-    io::Write,
-    path::Path,
-    collections::HashMap,
-};
 use serde::Serialize;
+use std::{collections::HashMap, fs::File, io::Write, path::Path};
 
 #[derive(Serialize)]
 struct DuplicateGroup {

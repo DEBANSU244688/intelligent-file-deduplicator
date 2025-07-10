@@ -1,7 +1,4 @@
-use std::{
-    collections::HashMap,
-    fs, io,
-};
+use std::{collections::HashMap, fs, io};
 
 /// Deletes duplicate files from the provided hash map, keeping only one copy per group.
 ///

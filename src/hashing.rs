@@ -1,8 +1,8 @@
+use sha2::{Digest, Sha256};
 use std::{
     fs::File,
     io::{self, Read},
 };
-use sha2::{Sha256, Digest};
 
 /// Computes the SHA-256 hash of the file at the given path.
 ///
@@ -25,7 +25,9 @@ pub fn hash_file(path: &str) -> io::Result<String> {
     // Read the file in chunks and update the hasher
     loop {
         let bytes_read = file.read(&mut buffer)?;
-        if bytes_read == 0 { break; } // End of file reached
+        if bytes_read == 0 {
+            break;
+        } // End of file reached
         hasher.update(&buffer[..bytes_read]);
     }
 

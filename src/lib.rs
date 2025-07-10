@@ -13,9 +13,9 @@
 //! - [`safe_delete`]: Safe deletion utilities to remove duplicates without data loss.
 //!
 //! Each module is documented individually with further details and usage examples.
-pub mod hashing;
 pub mod file_compare;
-pub mod scanner;
-pub mod report;
 pub mod filter;
+pub mod hashing;
+pub mod report;
 pub mod safe_delete;
+pub mod scanner;
