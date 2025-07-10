@@ -13,13 +13,25 @@ pub struct FilterOptions {
     pub regex: Option<Regex>,
 }
 
+/// Implements filtering logic for file paths based on size, extension, and regex criteria.
 impl FilterOptions {
+    /// Checks if the given `path` matches all filter options: size, extension, and regex.
+    ///
+    /// # Arguments
+    ///
+    /// * `path` - The file path to check against the filter options.
+    ///
+    /// # Returns
+    ///
+    /// * `true` if the path matches all filter criteria, `false` otherwise.
     pub fn matches(&self, path: &Path) -> bool {
-        self.check_size(path)
-            && self.check_extension(path)
-            && self.check_regex(path)
+        self.check_size(path) && self.check_extension(path) && self.check_regex(path)
     }
 
+    /// Checks if the file at the given `path` matches the size constraints.
+    ///
+    /// Returns `true` if the file size is within the specified minimum and maximum size (if set),
+    /// or if no size constraints are specified.
     fn check_size(&self, path: &Path) -> bool {
         if let Ok(metadata) = fs::metadata(path) {
             if let Some(min) = self.min_size {
@@ -36,6 +48,10 @@ impl FilterOptions {
         true
     }
 
+    /// Checks if the file at the given `path` matches the allowed extensions.
+    ///
+    /// Returns `true` if the file extension is in the allowed list (if set),
+    /// or if no extension constraints are specified.
     fn check_extension(&self, path: &Path) -> bool {
         if let Some(ref exts) = self.extensions {
             if let Some(ext) = path.extension().and_then(OsStr::to_str) {
@@ -47,6 +63,10 @@ impl FilterOptions {
         true
     }
 
+    /// Checks if the file name at the given `path` matches the specified regex pattern.
+    ///
+    /// Returns `true` if the file name matches the regex (if set),
+    /// or if no regex constraint is specified.
     fn check_regex(&self, path: &Path) -> bool {
         if let Some(ref re) = self.regex {
             if let Some(name) = path.file_name().and_then(OsStr::to_str) {

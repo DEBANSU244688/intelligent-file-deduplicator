@@ -10,15 +10,20 @@ use handler::*;
 
 use std::{env, process};
 
+/// Entry point of the program.
+/// Parses command-line arguments and dispatches to the appropriate handler function.
 fn main() {
+    // Collects the command-line arguments passed to the program into a vector of strings.
     let args: Vec<String> = env::args().collect();
 
+    // Check if at least one command is provided.
     if args.len() < 2 {
         eprintln!("❌ Error: Not enough arguments.");
         print_usage();
         process::exit(1);
     }
 
+    // Match the first argument to determine which command to execute.
     match args[1].as_str() {
         "compare" => handle_compare_command(&args),
         "scan" => handle_scan_command(&args),
@@ -33,6 +38,8 @@ fn main() {
     }
 }
 
+/// Prints usage information for the program.
+/// Called when arguments are missing or invalid.
 fn print_usage() {
     println!("Usage:");
     println!("  dedup compare <file1> <file2>          Compare two files");
