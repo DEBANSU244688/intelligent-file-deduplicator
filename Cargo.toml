@@ -2,6 +2,7 @@
 name = "intelligent-file-deduplicator"
 version = "0.1.0"
 edition = "2024"
+documentation = "https://github.com/DEBANSU244688/intelligent-file-deduplicator/hashlaser"
 
 [dependencies]
 sha2 = "0.10"
@@ -10,6 +11,7 @@ rayon = "1.7"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 regex = "1.10"
+colored = "3.0"
 
 [dev-dependencies]
 tempfile = "3"

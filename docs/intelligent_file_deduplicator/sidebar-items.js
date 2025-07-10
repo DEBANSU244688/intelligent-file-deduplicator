@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["file_compare","filter","hashing","report","safe_delete","scanner"]};

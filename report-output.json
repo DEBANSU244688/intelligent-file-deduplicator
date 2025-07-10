@@ -1,0 +1,25 @@
+{
+  "duplicates": [
+    {
+      "hash": "4e72a01ae771600f0120a076ba179c183ab944589e3d6fef5abc749f418300c4",
+      "files": [
+        "assets\\report1_copy.txt",
+        "assets\\report1.txt"
+      ]
+    },
+    {
+      "hash": "0984cc6fa6235dc86d5beaa74de081bffee280caf72b3e5ff03317cf810b312f",
+      "files": [
+        "assets\\file2.txt",
+        "assets\\copy_of_file2.txt"
+      ]
+    },
+    {
+      "hash": "24a76a2e0efee47b480fb964d004c94454ededae9cd6f8b5ad9731eb4b9f6fc4",
+      "files": [
+        "assets\\file1.txt",
+        "assets\\copy_of_file1.txt"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["set_override","set_virtual_terminal","unset_override"],"static":["SHOULD_COLORIZE"],"struct":["ShouldColorize"]};
