@@ -1,2 +1,2 @@
-window.ALL_CRATES = ["aho_corasick","block_buffer","cfg_if","colored","cpufeatures","crossbeam_deque","crossbeam_epoch","crossbeam_utils","crypto_common","digest","either","generic_array","hex","intelligent_file_deduplicator","itoa","memchr","proc_macro2","quote","rayon","rayon_core","regex","regex_automata","regex_syntax","ryu","serde","serde_derive","serde_json","sha2","syn","typenum","unicode_ident","windows_sys","windows_targets","windows_x86_64_gnu"];
-//{"start":21,"fragment_lengths":[14,15,9,10,14,18,18,18,16,9,9,16,6,32,7,9,14,8,8,13,8,17,15,6,8,15,13,7,6,10,16,14,18,21]}
+window.ALL_CRATES = ["intelligent_file_deduplicator"];
+//{"start":21,"fragment_lengths":[31]}
